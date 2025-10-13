@@ -1,0 +1,36 @@
+﻿@model TheatreApp.Web.ViewModels.Ticket.BuyTicketViewModel
+
+@{
+    ViewData["Title"] = "Choose Your Seat";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-3">
+        <h3 class="fw-bold mb-4 text-center text-dark">Select Your Seat</h3>
+
+        <form asp-action="Buy" method="post">
+            <input type="hidden" asp-for="PerformanceId" />
+
+            <div class="mb-3">
+                <label asp-for="SeatNumber" class="form-label fw-bold"></label>
+                <select asp-for="SeatNumber" class="form-select" required>
+                    <option value="">-- Select an available seat --</option>
+                    @foreach (var seat in Model.AvailableSeats)
+                    {
+                        <option value="@seat">@seat</option>
+                    }
+                </select>
+                <span asp-validation-for="SeatNumber" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-controller="Performance" asp-action="Index" class="btn btn-secondary fw-bold px-4">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-success fw-bold px-4">
+                    Confirm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

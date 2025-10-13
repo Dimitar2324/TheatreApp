@@ -1,0 +1,65 @@
+﻿@using TheatreApp.Web.ViewModels.Favourite
+@model IEnumerable<FavouriteViewModel>
+
+@{
+    ViewData["Title"] = "My Favourites";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="text-light fw-bold">My Favourites</h1>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary fw-bold">
+            <i class="bi bi-arrow-left">Back to Home Page</i>
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <strong>Your favourites list is empty!</strong> Add plays to your favourites list to see them here.
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-column gap-2">
+            @foreach (var play in Model)
+            {
+                <div class="card shadow-lg border-0 rounded-3 d-flex flex-row align-items-center p-2"
+                     style="height: 140px; max-height: 140px;">
+
+                    <img src="@play.ImageUrl" class="rounded"
+                         alt="@play.Title"
+                         style="width: 100px; height: 130px; object-fit: cover;">
+
+                    <div class="card-body ms-3 p-2 text-light" style="flex-grow: 1;">
+                        <h6 class="fw-bold mb-1 text-dark">@play.Title</h6>
+                        <p class="text-muted mb-0" style="font-size: 0.85rem;">
+                            <strong>Genre:</strong> @play.Genre
+                        </p>
+                        <p class="text-muted mb-1" style="font-size: 0.85rem;">
+                            <strong>Release Date:</strong> @play.ReleaseDate
+                        </p>
+                    </div>
+
+                    <div class="me-3">
+                        <a asp-controller="Play"
+                           asp-action="Details"
+                           asp-route-id="@play.PlayId"
+                           class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                            <i class="fas fa-eye">View Details</i>
+                        </a>
+
+                        <form asp-controller="Favourite" asp-action="Remove" method="post" class="d-inline">
+                            <input type="hidden" name="playId" value="@play.PlayId" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                                <i class="fas fa-trash">Remove</i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<link rel="stylesheet" href="~/css/user-styles.css">

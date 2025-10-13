@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "TheatreApp.Web.csproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "..\\TheatreApp.WebApi\\TheatreApp.WebApi.csproj",
+        "Action": "StartWithoutDebugging"
+      }
+    ]
+  }
+]

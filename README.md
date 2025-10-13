@@ -2,7 +2,7 @@
 
 > ⚠️ **Status:** This project is currently under active development. Some features are incomplete or in progress — expect updates and improvements in future versions.
 
-A web application project built with **ASP.NET Core**, **Entity Framework Core**, **HTML, CSS and Bootstrap**, designed to help users browse plays, manage favourites, view performances, and purchase tickets — all in one place.
+> A web application project built with **ASP.NET Core**, **Entity Framework Core**, **HTML, CSS and Bootstrap**, designed to help users browse plays, manage favourites, view performances, and purchase tickets — all in one place.
 ---
 
 ## 🚀 Features (Current version)

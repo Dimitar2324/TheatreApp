@@ -8,7 +8,7 @@ A web application project built with **ASP.NET Core**, **Entity Framework Core**
 ## 🚀 Features (Current version)
 
 ### 🎬 Plays Management
-- **View all plays** (Read)
+- **View all plays** 
 - **Add new plays**
 - **Edit play details**
 - **Delete plays**

@@ -1,9 +1,10 @@
 ﻿@model TheatreApp.Web.ViewModels.Play.PlayInputFormModel
+@using TheatreApp.Utils.Constants; 
 
 @{
     ViewData["Title"] = "Add New Play";
 
-    string dateFormat = "yyyy-MM-dd";
+    string dateFormat = GlobalApplicationConstants.ReleaseDateFormat;
     bool hasDate = DateOnly.TryParse(Model?.ReleaseDate, out var date);
     string releaseDateStringRepresentation = hasDate ? date.ToString(dateFormat) : String.Empty;
 }

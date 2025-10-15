@@ -12,8 +12,8 @@ using TheatreApp.Data;
 namespace TheatreApp.Data.Migrations
 {
     [DbContext(typeof(TheatreAppDbContext))]
-    [Migration("20251005114349_AddedTicketsAndPerformancesMigration")]
-    partial class AddedTicketsAndPerformancesMigration
+    [Migration("20251015120204_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,10 +25,11 @@ namespace TheatreApp.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -52,7 +53,7 @@ namespace TheatreApp.Data.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,9 +67,8 @@ namespace TheatreApp.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -77,10 +77,94 @@ namespace TheatreApp.Data.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("TheatreApp.Data.Models.ApplicationUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -142,91 +226,6 @@ namespace TheatreApp.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
-
             modelBuilder.Entity("TheatreApp.Data.Models.Performance", b =>
                 {
                     b.Property<Guid>("Id")
@@ -262,11 +261,41 @@ namespace TheatreApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayId");
+                    b.HasIndex("PlayId", "StartTime")
+                        .IsUnique();
 
                     b.ToTable("Performances", t =>
                         {
                             t.HasComment("Perfomance in the system");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3c8e523e-29cd-4473-b4f3-74330c1d8dd1"),
+                            AvailableSeats = 120,
+                            HallName = "Main Hall",
+                            IsDeleted = false,
+                            PlayId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            StartTime = new DateTime(2025, 10, 15, 19, 30, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = new Guid("6bd131b8-fe5d-415f-94d1-6f0ed0bc2dd4"),
+                            AvailableSeats = 200,
+                            HallName = "Grand Theatre",
+                            IsDeleted = false,
+                            PlayId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            StartTime = new DateTime(2025, 11, 2, 20, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = new Guid("a6321b71-7b6a-416e-a1bb-6ed0f2a5d37e"),
+                            AvailableSeats = 250,
+                            HallName = "Opera Hall",
+                            IsDeleted = false,
+                            PlayId = new Guid("66666666-6666-6666-6666-666666666666"),
+                            StartTime = new DateTime(2025, 11, 15, 20, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -362,7 +391,7 @@ namespace TheatreApp.Data.Migrations
                             Director = "Cameron Mackintosh",
                             Duration = 180,
                             Genre = "Musical",
-                            ImageUrl = "https://en.wikipedia.org/wiki/Les_Mis%C3%A9rables#/media/File:Emile_Bayard_-_Cosette.jpg",
+                            ImageUrl = "https://media.londontheatredirect.com/Event/LesMiserables/event-hero-image_45974.png",
                             IsDeleted = false,
                             ReleaseDate = new DateOnly(1980, 9, 24),
                             ScreenWriter = "Claude-Michel Schönberg",
@@ -376,7 +405,7 @@ namespace TheatreApp.Data.Migrations
                             Director = "Joseph Losey",
                             Duration = 135,
                             Genre = "Drama",
-                            ImageUrl = "https://en.wikipedia.org/wiki/A_Doll%27s_House#/media/File:Adeleide_Johannessen_som_Nora_i_%22Et_dukkehjem%22,_Bergen_(11286565955).jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/61E1XsHuy-L._UF1000,1000_QL80_.jpg",
                             IsDeleted = false,
                             ReleaseDate = new DateOnly(1879, 12, 21),
                             ScreenWriter = "Christopher Hampton",
@@ -390,7 +419,7 @@ namespace TheatreApp.Data.Migrations
                             Director = "Peter Hall",
                             Duration = 140,
                             Genre = "Absurdist",
-                            ImageUrl = "https://en.wikipedia.org/wiki/Waiting_for_Godot#/media/File:En_attendant_Godot,_Festival_d'Avignon,_1978.jpeg",
+                            ImageUrl = "https://www.hollywoodreporter.com/wp-content/uploads/2025/09/GODOT_AndyHenderson-3-H-2025.jpg?w=1296&h=730&crop=1",
                             IsDeleted = false,
                             ReleaseDate = new DateOnly(1953, 1, 5),
                             ScreenWriter = "Samuel Beckett",
@@ -404,7 +433,7 @@ namespace TheatreApp.Data.Migrations
                             Director = "Elia Kazan",
                             Duration = 150,
                             Genre = "Tragedy",
-                            ImageUrl = "https://en.wikipedia.org/wiki/Death_of_a_Salesman#/media/File:DeathOfASalesman.jpg",
+                            ImageUrl = "https://mediaproxy.tvtropes.org/width/1200/https://static.tvtropes.org/pmwiki/pub/images/death_of_a_salesman_1.JPG",
                             IsDeleted = false,
                             ReleaseDate = new DateOnly(1949, 2, 10),
                             ScreenWriter = "Arthur Miller",
@@ -418,7 +447,7 @@ namespace TheatreApp.Data.Migrations
                             Director = "Harold Prince",
                             Duration = 175,
                             Genre = "Musical",
-                            ImageUrl = "https://en.wikipedia.org/wiki/The_Phantom_of_the_Opera_(1986_musical)#/media/File:The_Phantom_of_the_Opera_(1986_musical).jpg",
+                            ImageUrl = "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,h=501,fit=crop/YBgEp8nRLoCX8eJW/poto_s2_eventim_420_560_bg_sf-YZ92EQ6Rp5TMpRoj.jpg",
                             IsDeleted = false,
                             ReleaseDate = new DateOnly(1986, 10, 9),
                             ScreenWriter = "Andrew Lloyd Webber",
@@ -433,6 +462,11 @@ namespace TheatreApp.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasComment("Ticket identifier");
 
+                    b.Property<bool>("IsBooked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<Guid>("PerformanceId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("Foreign key to the performance");
@@ -445,9 +479,8 @@ namespace TheatreApp.Data.Migrations
                         .HasColumnType("int")
                         .HasComment("SeatNumber in the theatre");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("Foreign key to the user");
 
                     b.HasKey("Id");
@@ -460,12 +493,78 @@ namespace TheatreApp.Data.Migrations
                         {
                             t.HasComment("Ticket in the system");
                         });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f4a2b638-cc0d-4ff8-8053-5210453cecc4"),
+                            IsBooked = false,
+                            PerformanceId = new Guid("3c8e523e-29cd-4473-b4f3-74330c1d8dd1"),
+                            Price = 25.00m,
+                            SeatNumber = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7ca523d3-e6bb-4ea4-a97e-5a4d19c0bf99"),
+                            IsBooked = false,
+                            PerformanceId = new Guid("3c8e523e-29cd-4473-b4f3-74330c1d8dd1"),
+                            Price = 25.00m,
+                            SeatNumber = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("cf24e7cf-e4a3-41dd-bb75-4823c5bd95a2"),
+                            IsBooked = false,
+                            PerformanceId = new Guid("3c8e523e-29cd-4473-b4f3-74330c1d8dd1"),
+                            Price = 25.00m,
+                            SeatNumber = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("f267c41d-03db-406b-8bcc-78ad094f4411"),
+                            IsBooked = false,
+                            PerformanceId = new Guid("6bd131b8-fe5d-415f-94d1-6f0ed0bc2dd4"),
+                            Price = 30.00m,
+                            SeatNumber = 10
+                        },
+                        new
+                        {
+                            Id = new Guid("e17bed71-3daf-43b0-b4d3-0b96763f50b5"),
+                            IsBooked = false,
+                            PerformanceId = new Guid("6bd131b8-fe5d-415f-94d1-6f0ed0bc2dd4"),
+                            Price = 30.00m,
+                            SeatNumber = 11
+                        },
+                        new
+                        {
+                            Id = new Guid("ca435dc3-7d25-420e-bd88-3d40062e80dd"),
+                            IsBooked = false,
+                            PerformanceId = new Guid("6bd131b8-fe5d-415f-94d1-6f0ed0bc2dd4"),
+                            Price = 30.00m,
+                            SeatNumber = 12
+                        },
+                        new
+                        {
+                            Id = new Guid("5d07c7a8-7724-4e46-aa87-51a02178a865"),
+                            IsBooked = false,
+                            PerformanceId = new Guid("a6321b71-7b6a-416e-a1bb-6ed0f2a5d37e"),
+                            Price = 35.00m,
+                            SeatNumber = 21
+                        },
+                        new
+                        {
+                            Id = new Guid("5d8a338d-bd09-4894-b045-641a65fd3a55"),
+                            IsBooked = false,
+                            PerformanceId = new Guid("a6321b71-7b6a-416e-a1bb-6ed0f2a5d37e"),
+                            Price = 35.00m,
+                            SeatNumber = 22
+                        });
                 });
 
             modelBuilder.Entity("TheatreApp.Data.Models.UserPlay", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("Foreign key to the user");
 
                     b.Property<Guid>("PlayId")
@@ -488,51 +587,51 @@ namespace TheatreApp.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("TheatreApp.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("TheatreApp.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("TheatreApp.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("TheatreApp.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -558,11 +657,9 @@ namespace TheatreApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("TheatreApp.Data.Models.ApplicationUser", "User")
+                        .WithMany("Tickets")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Performance");
 
@@ -577,8 +674,8 @@ namespace TheatreApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
+                    b.HasOne("TheatreApp.Data.Models.ApplicationUser", "User")
+                        .WithMany("UserFavourites")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -586,6 +683,13 @@ namespace TheatreApp.Data.Migrations
                     b.Navigation("Play");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TheatreApp.Data.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Tickets");
+
+                    b.Navigation("UserFavourites");
                 });
 
             modelBuilder.Entity("TheatreApp.Data.Models.Performance", b =>

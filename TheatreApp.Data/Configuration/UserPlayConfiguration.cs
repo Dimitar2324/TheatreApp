@@ -27,7 +27,7 @@ namespace TheatreApp.Data.Configuration
 
             entity
                 .HasOne(e => e.User)
-                .WithMany()
+                .WithMany(u => u.UserFavourites)
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 

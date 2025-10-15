@@ -20,12 +20,13 @@ namespace TheatreApp.Services.Core
             var performances = await this.performanceRepository
                                 .All()
                                 .Include(p => p.Play)
+                                .Include(p => p.Tickets)
                                 .Select(p => new PerformanceIndexViewModel()
                                 {
                                     Id = p.Id.ToString(),
                                     HallName = p.HallName,
                                     StartTime = p.StartTime.ToString(GlobalApplicationConstants.PerformanceStartTimeFormat),
-                                    AvailableSeats = p.AvailableSeats,
+                                    AvailableTicketsCount = p.Tickets.Where(t => !t.IsBooked).Count(),
                                     PlayId = p.PlayId.ToString(),
                                     PlayTitle = p.Play.Title,
                                     ImageUrl = p.Play.ImageUrl ?? GlobalApplicationConstants.NotExistingImageUrl

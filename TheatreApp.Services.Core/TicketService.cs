@@ -29,7 +29,7 @@ namespace TheatreApp.Services.Core
                     .All()
                     .Include(t => t.Performance)
                     .ThenInclude(p => p.Play)
-                    .Where(t => t.UserId != null && t.UserId.ToLower() == userId.ToLower())
+                    .Where(t => t.UserId != null && t.UserId.ToString().ToLower() == userId.ToLower())
                     .Select(t => new TicketIndexViewModel()
                     {
                         PlayTitle = t.Performance.Play.Title,
@@ -55,7 +55,9 @@ namespace TheatreApp.Services.Core
                 Performance? targetPerformance = await this.performanceRepository
                              .FirstOrDefaultAsync(p => p.Id.ToString().ToLower() == performanceId.ToLower());
 
-                if (targetPerformance != null && targetPerformance.AvailableSeats > 0)
+                bool isUserIdValid = Guid.TryParse(userId, out var userGuid);
+
+                if (isUserIdValid && targetPerformance != null && targetPerformance.AvailableSeats > 0)
                 {
                     int seat = int.Parse(seatNumber);
                     Ticket? ticket = await this.ticketRepository
@@ -64,11 +66,9 @@ namespace TheatreApp.Services.Core
 
                     if (ticket != null && !ticket.IsBooked)
                     {
-                        ticket.UserId = userId;
+                        ticket.UserId = userGuid;
                         ticket.IsBooked = true;
                         result = await this.ticketRepository.UpdateAsync(ticket);
-
-                        targetPerformance.AvailableSeats--;
                         result = await this.performanceRepository.UpdateAsync(targetPerformance);
                     }
                 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace TheatreApp.Data.Models
 {
@@ -7,8 +6,8 @@ namespace TheatreApp.Data.Models
     public class UserPlay
     {
         [Comment("Foreign key to the user")]
-        public string UserId { get; set; } = null!;
-        public IdentityUser User { get; set; } = null!;
+        public Guid UserId { get; set; }
+        public ApplicationUser User { get; set; } = null!;
 
         [Comment("Foreign key to the play")]
         public Guid PlayId { get; set; }

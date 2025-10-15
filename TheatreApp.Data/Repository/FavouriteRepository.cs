@@ -15,7 +15,7 @@ namespace TheatreApp.Data.Repository
         {
             return this
                 .All()
-                .FirstOrDefaultAsync(up => up.UserId.ToLower() == userId.ToLower()
+                .FirstOrDefaultAsync(up => up.UserId.ToString().ToLower() == userId.ToLower()
                                            && up.PlayId.ToString().ToLower() == playId.ToLower());
         }
 
@@ -23,7 +23,7 @@ namespace TheatreApp.Data.Repository
         {
             return this
                .All()
-               .AnyAsync(up => up.UserId.ToLower() == userId.ToLower()
+               .AnyAsync(up => up.UserId.ToString().ToLower() == userId.ToLower()
                             && up.PlayId.ToString().ToLower() == playId.ToLower());
         }
     }

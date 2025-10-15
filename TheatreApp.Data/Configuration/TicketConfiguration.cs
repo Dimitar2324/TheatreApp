@@ -35,7 +35,7 @@ namespace TheatreApp.Data.Configuration
 
             entity
                 .HasOne(e => e.User)
-                .WithMany()
+                .WithMany(u => u.Tickets)
                 .HasForeignKey(e => e.UserId);
 
             entity

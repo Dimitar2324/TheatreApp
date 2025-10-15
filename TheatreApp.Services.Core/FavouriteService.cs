@@ -23,7 +23,7 @@ namespace TheatreApp.Services.Core
                 .All()
                 .Include(up => up.Play)
                 .AsNoTracking()
-                .Where(up => up.UserId.ToLower() == id.ToLower())
+                .Where(up => up.UserId.ToString().ToLower() == id.ToLower())
                 .Select(up => new FavouriteViewModel()
                 {
                     PlayId = up.PlayId.ToString(),
@@ -41,15 +41,17 @@ namespace TheatreApp.Services.Core
         {
             bool result = false;
 
-            if (playId != null && userId != null)
+            if (!string.IsNullOrWhiteSpace(playId) && !string.IsNullOrWhiteSpace(userId))
             {
                 bool isGuidValid = Guid.TryParse(playId, out var playGuid);
-                if (isGuidValid)
+                bool isUserGuidValid = Guid.TryParse(userId, out var userGuid);
+
+                if (isGuidValid && isUserGuidValid)
                 {
                     UserPlay? userPlays = await this.favouriteRepository
                         .All()
                         .IgnoreQueryFilters()
-                        .FirstOrDefaultAsync(up => up.UserId.ToLower() == userId.ToLower()
+                        .FirstOrDefaultAsync(up => up.UserId.ToString().ToLower() == userId.ToLower()
                                                     && up.PlayId.ToString() == playGuid.ToString());
 
                     if (userPlays != null)
@@ -61,7 +63,7 @@ namespace TheatreApp.Services.Core
                     {
                         UserPlay newRecord = new UserPlay()
                         {
-                            UserId = userId,
+                            UserId = Guid.Parse(userId),
                             PlayId = playGuid
                         };
 
@@ -78,13 +80,15 @@ namespace TheatreApp.Services.Core
         {
             bool result = false;
 
-            if (playId != null && userId != null)
+            if (!string.IsNullOrWhiteSpace(playId) && !string.IsNullOrWhiteSpace(userId))
             {
-                bool isGuidValid = Guid.TryParse(playId, out var playGuid);
-                if (isGuidValid)
+                bool isPlayGuidValid = Guid.TryParse(playId, out var playGuid);
+                bool isUserGuidValid = Guid.TryParse(userId, out var userGuid);
+
+                if (isPlayGuidValid && isUserGuidValid)
                 {
                     UserPlay? userPlays = await this.favouriteRepository
-                                                    .FirstOrDefaultAsync(up => up.UserId.ToLower() == userId.ToLower()
+                                                    .FirstOrDefaultAsync(up => up.UserId.ToString().ToLower() == userId.ToLower()
                                                                                && up.PlayId.ToString() == playGuid.ToString());
 
                     if (userPlays != null)

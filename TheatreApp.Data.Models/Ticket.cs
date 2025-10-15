@@ -20,8 +20,8 @@ namespace TheatreApp.Data.Models
         public virtual Performance Performance { get; set; } = null!;
 
         [Comment("Foreign key to the user")]
-        public string? UserId { get; set; }
-        public virtual IdentityUser? User { get; set; }
+        public Guid? UserId { get; set; }
+        public virtual ApplicationUser? User { get; set; }
 
         public bool IsBooked { get; set; }
     }

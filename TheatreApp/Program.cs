@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 using TheatreApp.Data;
+using TheatreApp.Data.Configuration;
 using TheatreApp.Data.Models;
 using TheatreApp.Data.Repository;
 using TheatreApp.Data.Repository.Interfaces;
@@ -12,34 +12,45 @@ namespace TheatreApp.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
             builder.Services.AddDbContext<TheatreAppDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-            {
-                ConfigureIdentity(options);
-            })
-             .AddEntityFrameworkStores<TheatreAppDbContext>();
+            builder.Services
+                .AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+                {
+                    ConfigureIdentity(options);
+                })
+                .AddEntityFrameworkStores<TheatreAppDbContext>()
+                .AddRoles<IdentityRole<Guid>>()
+                .AddSignInManager<SignInManager<ApplicationUser>>()
+                .AddUserManager<UserManager<ApplicationUser>>();
 
-            builder.Services.AddScoped<IPlayRepository, PlayRepository>();
-            builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
-            builder.Services.AddScoped<IPerformanceRepository, PerformanceRepository>();
-            builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
-            builder.Services.AddScoped<IPlayService, PlayService>();
-            builder.Services.AddScoped<IFavouriteService, FavouriteService>();
-            builder.Services.AddScoped<IPerformanceService, PerformanceService>();
-            builder.Services.AddScoped<ITicketService, TicketService>();
+            AddRepositories(builder);
+            AddServices(builder);
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
+
+
+            await using (var scope = app.Services.CreateAsyncScope())
+            {
+                var services = scope.ServiceProvider;
+
+                await IdentitySeeder.SeedRolesAsync(services);
+                await IdentitySeeder.SeedUsersAsync(services);
+            }
 
             if (app.Environment.IsDevelopment())
             {
@@ -47,7 +58,7 @@ namespace TheatreApp.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");               
+                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 
@@ -66,6 +77,22 @@ namespace TheatreApp.Web
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        private static void AddServices(WebApplicationBuilder builder)
+        {
+            builder.Services.AddScoped<IPlayService, PlayService>();
+            builder.Services.AddScoped<IFavouriteService, FavouriteService>();
+            builder.Services.AddScoped<IPerformanceService, PerformanceService>();
+            builder.Services.AddScoped<ITicketService, TicketService>();
+        }
+
+        private static void AddRepositories(WebApplicationBuilder builder)
+        {
+            builder.Services.AddScoped<IPlayRepository, PlayRepository>();
+            builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
+            builder.Services.AddScoped<IPerformanceRepository, PerformanceRepository>();
+            builder.Services.AddScoped<ITicketRepository, TicketRepository>();
         }
 
         private static void ConfigureIdentity(IdentityOptions options)

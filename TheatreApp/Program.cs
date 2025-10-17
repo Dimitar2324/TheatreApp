@@ -6,6 +6,8 @@ using TheatreApp.Data.Models;
 using TheatreApp.Data.Repository;
 using TheatreApp.Data.Repository.Interfaces;
 using TheatreApp.Services.Core;
+using TheatreApp.Services.Core.Admin;
+using TheatreApp.Services.Core.Admin.Interfaces;
 using TheatreApp.Services.Core.Interfaces;
 
 namespace TheatreApp.Web
@@ -63,13 +65,14 @@ namespace TheatreApp.Web
             }
 
             app.UseStatusCodePagesWithRedirects("Home/Error?statusCode={0}");
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
+            
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area}/{controller=Home}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",
@@ -85,6 +88,7 @@ namespace TheatreApp.Web
             builder.Services.AddScoped<IFavouriteService, FavouriteService>();
             builder.Services.AddScoped<IPerformanceService, PerformanceService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
+            builder.Services.AddScoped<IUserService, UserService>();
         }
 
         private static void AddRepositories(WebApplicationBuilder builder)

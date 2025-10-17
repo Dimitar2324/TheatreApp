@@ -5,5 +5,9 @@
         public const string ReleaseDateFormat = "yyyy-MM-dd";
         public const string NotExistingImageUrl = "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
         public const string PerformanceStartTimeFormat = "dd.MM.yyyy HH:mm";
+        public const string UserRoleName = "User";
+        public const string ManagerRoleName = "Manager";
+        public const string AdminRoleName = "Admin";
+        public const string AdminAreaName = "Admin";
     }
 }

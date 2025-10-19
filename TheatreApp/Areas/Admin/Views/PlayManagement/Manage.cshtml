@@ -1,0 +1,71 @@
+﻿@using TheatreApp.Web.ViewModels.Admin.PlayManagement
+@model IEnumerable<PlayManagementIndexViewModel>
+
+@{
+    ViewData["Title"] = "Manage Plays";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-warning fw-bold">Manage Plays</h1>
+    <p class="text-center text-muted">The place to Add, Delete or Restore Plays.</p>
+
+    <div class="d-flex justify-content-between mb-3">
+        <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-secondary fw-bold">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+
+        <a asp-action="Add" class="btn btn-success fw-bold shadow-lg">
+            <i class="bi bi-plus-circle"></i> Add Play
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center" role="alert">
+            <i class="bi bi-exclamation-circle"></i> No plays available. Click "Add Play" to create one.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-dark table-hover shadow-lg rounded-3">
+                <thead class="thead-light">
+                    <tr class="text-warning text-center">
+                        <th scope="col">Title</th>
+                        <th scope="col">Genre</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Release Date</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var play in Model)
+                    {
+                        <tr class="align-middle text-center @(play.IsDeleted ? "table-danger" : "")">
+                            <td class="fw-bold">
+                                @play.Title
+                                @if (play.IsDeleted)
+                                {
+                                    <span class="badge bg-danger ms-2">Deleted</span>
+                                }
+                            </td>
+                            <td>@play.Genre</td>
+                            <td>@play.Duration min</td>
+                            <td>@play.Author</td>
+                            <td>@play.ReleaseDate</td>
+                            <td>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a asp-action="ToggleDelete" asp-route-id="@play.Id" class="btn @(play.IsDeleted ? "btn-warning" : "btn-danger") btn-sm fw-bold">
+                                        <i class="bi @(play.IsDeleted ? "bi-arrow-clockwise" : "bi-trash")"></i>
+                                        @(play.IsDeleted ? "Restore" : "Delete")
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

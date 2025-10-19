@@ -23,32 +23,6 @@ namespace TheatreApp.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Add(PlayInputFormModel inputPlayModel) 
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(inputPlayModel);
-            }
-
-            try
-            {
-                await playService.AddPlayAsync(inputPlayModel);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return View();
-            }
-        }
-
-        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Details(string? id)
         {
@@ -115,48 +89,6 @@ namespace TheatreApp.Web.Controllers
             {
                 Console.WriteLine(ex.Message);
                 return RedirectToAction(nameof(Index));
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Delete(string? id)
-        {
-            try
-            {
-                PlayDeleteInformationViewModel? playToBeDeleted = await playService
-                    .GetPlayDeleteInformationViewAsync(id);
-
-                if (playToBeDeleted == null)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-
-                return View(playToBeDeleted);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return RedirectToAction(nameof(Index));
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(PlayDeleteInformationViewModel playModel)
-        {
-            try
-            {
-                bool isDeleteOperationSuccessful = await playService.SoftDeletePlayAsync(playModel.Id);
-                if (!isDeleteOperationSuccessful)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return RedirectToAction(nameof(Index), "Home");
             }
         }
     }

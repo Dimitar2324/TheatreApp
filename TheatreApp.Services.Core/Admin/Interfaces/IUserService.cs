@@ -5,5 +5,7 @@ namespace TheatreApp.Services.Core.Admin.Interfaces
     public interface IUserService
     {
         Task<IEnumerable<UserManagementIndexViewModel>> GetAllManageableUsersAsync(string userId);
+
+        Task<bool> AssignToRoleAsync(RoleSelectionViewModel roleSelectionInputModel);
     }
 }

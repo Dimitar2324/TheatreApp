@@ -13,12 +13,28 @@ namespace TheatreApp.Web.Areas.Admin.Controllers
             this.userService = userService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             IEnumerable<UserManagementIndexViewModel> users = await this.userService
                 .GetAllManageableUsersAsync(this.GetUserId()!);
 
             return View(users);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRole(RoleSelectionViewModel roleSelectionInputModel)
+        {
+            try
+            {
+                await this.userService.AssignToRoleAsync(roleSelectionInputModel);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return this.RedirectToAction(nameof(Index));
         }
     }
 }

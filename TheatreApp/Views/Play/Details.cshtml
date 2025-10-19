@@ -1,4 +1,5 @@
 ﻿@using TheatreApp.Web.ViewModels.Play
+@using TheatreApp.Utils.Constants
 @model PlayDetailsViewModel
 
 @{
@@ -32,15 +33,13 @@
 
 				@if (User.Identity?.IsAuthenticated ?? false)
 				{
-					<a asp-controller="Play" asp-action="Edit" asp-route-id="@Model.Id"
-					   class="btn btn-info btn-sm rounded-pill px-4 fw-bold text-white">
-						<i class="bi bi-pencil-square">Edit</i>
-					</a>
-
-					<a asp-controller="Play" asp-action="Delete" asp-route-id="@Model.Id"
-					   class="btn btn-danger btn-sm rounded-pill px-4 fw-bold text-white">
-						<i class="bi bi-trash">Delete</i>
-					</a>
+					@if (User.IsInRole(GlobalApplicationConstants.ManagerRoleName) || User.IsInRole(GlobalApplicationConstants.AdminRoleName))
+					{
+						<a asp-controller="Play" asp-action="Edit" asp-route-id="@Model.Id"
+						   class="btn btn-info btn-sm rounded-pill px-4 fw-bold text-white">
+							<i class="bi bi-pencil-square">Edit</i>
+						</a>
+					}
 				}
 			</div>
 

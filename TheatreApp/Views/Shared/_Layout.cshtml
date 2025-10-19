@@ -1,4 +1,6 @@
-﻿@{
+﻿@using TheatreApp.Utils.Constants
+
+@{
 	int currentYear = DateTime.UtcNow.Year;
 	string footerNote = (2025 == currentYear) ? $"{currentYear}" : $"{2025} - {currentYear}";
 }
@@ -60,11 +62,29 @@
 								</a>
 							</li>
 
-							<li class="nav-item">
-								<a class="nav-link text-light" asp-area="" asp-controller="Play" asp-action="Add">
-									<i class="bi bi-file-plus"></i> Add Play
-								</a>
-							</li>
+
+							@if (User.IsInRole(GlobalApplicationConstants.AdminRoleName))
+							{
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle text-light fw-bold" href="#" id="manageDropdown"
+									   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										<i class="bi bi-tools"></i> Admin
+									</a>
+									<ul class="dropdown-menu dropdown-menu-dark border-0">
+										<li>
+											<a class="dropdown-item" asp-area="Admin" asp-controller="UserManagement" asp-action="Index">
+												<i class="bi bi-people"></i> Manage Users
+											</a>
+										</li>
+										
+										<li>
+											<a class="dropdown-item" asp-area="Admin" asp-controller="PlayManagement" asp-action="Manage">
+												<i class="bi bi-mask"></i> Manage Plays
+											</a>
+										</li>
+									</ul>
+								</li>
+							}
 						}
 
 					</ul>

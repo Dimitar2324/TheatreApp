@@ -89,6 +89,7 @@ namespace TheatreApp.Web
             builder.Services.AddScoped<IPerformanceService, PerformanceService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IPlayManagementService, PlayManagementService>();
         }
 
         private static void AddRepositories(WebApplicationBuilder builder)

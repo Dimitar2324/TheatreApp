@@ -45,24 +45,6 @@ namespace TheatreApp.Services.Core
             return plays;
         }
 
-        public async Task AddPlayAsync(PlayInputFormModel playForm)
-        {
-            Play newPlay = new Play()
-            {
-                Title = playForm.Title,
-                Author = playForm.Author,
-                Description = playForm.Description,
-                Genre = playForm.Genre,
-                Director = playForm.Director,
-                ScreenWriter = playForm.ScreenWriter,
-                Duration = playForm.Duration,
-                ReleaseDate = DateOnly.ParseExact(playForm.ReleaseDate, GlobalApplicationConstants.ReleaseDateFormat, CultureInfo.InvariantCulture),
-                ImageUrl = playForm.ImageUrl
-            };
-
-            await this.playRepository.AddAsync(newPlay);
-        }
-
         public async Task<PlayDetailsViewModel?> GetPlayDetailsByIdAsync(string? id)
         {
             PlayDetailsViewModel? playDetailsModel = null;
@@ -155,31 +137,6 @@ namespace TheatreApp.Services.Core
             }
 
             return playInformation;
-        }
-
-        public async Task<bool> SoftDeletePlayAsync(string? id)
-        {
-            Play? targetPlay = await this.FindPlayByStringId(id);
-
-            if (targetPlay == null)
-            {
-                return false;
-            }
-
-            return await this.playRepository.DeleteAsync(targetPlay);            
-        }
-
-
-        public async Task<bool> DeletePlayAsync(string? id)
-        {
-            Play? play = await this.FindPlayByStringId(id);
-
-            if (play == null)
-            {
-                return false;
-            }
-
-            return await this.playRepository.HardDeleteAsync(play);
         }
 
         private async Task<Play?> FindPlayByStringId(string? id)

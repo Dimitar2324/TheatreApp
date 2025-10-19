@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TheatreApp.Data\TheatreApp.Data.csproj" />
     <ProjectReference Include="..\TheatreApp.Services.Core\TheatreApp.Services.Core.csproj" />
+    <ProjectReference Include="..\TheatreApp.Utils.Constants\TheatreApp.Utils.Constants.csproj" />
     <ProjectReference Include="..\TheatreApp.Web.ViewModels\TheatreApp.Web.ViewModels.csproj" />
   </ItemGroup>
 

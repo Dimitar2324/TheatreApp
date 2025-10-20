@@ -1,17 +1,19 @@
 # 🎭 Theatre Management Web Application
 
-> ⚠️ **Status:** This project is currently under active development.
->      Some features are incomplete or in progress — expect updates and improvements in future versions.
+> ⚠️ **Status:** This project is currently under active development.  
+> Some features are incomplete or in progress — expect updates and improvements in future versions.
 
 A web application project built with **ASP.NET Core**, **Entity Framework Core**, **HTML, CSS and Bootstrap**, designed to help users browse plays, manage favourites, view performances, and purchase tickets — all in one place.
 
-## 🚀 Features (Current version)
+---
+
+## 🚀 Features
 
 ### 🎬 Plays Management
-- **View all plays** 
+- **View all plays**
 - **Add new plays**
 - **Edit play details**
-- **Delete plays**
+- **Delete or restore plays**
 - **View details about each play**
 
 ### ❤️ Favourites
@@ -22,6 +24,24 @@ A web application project built with **ASP.NET Core**, **Entity Framework Core**
 - **View all available performances**
 - **Buy tickets** for specific performances
 - **View purchased tickets**
+
+### 👥 User Management *(Admin Area)*
+- **View all registered users**
+- **Assign role to a user**
+- **Remove role from a user**
+- **Delete user**
+
+---
+
+## 🔐 Roles
+
+The system uses **Role-Based Authorization** to restrict access to admin features.
+
+| Role | Description |
+|------|-------------|
+| **User** | Default role with access to browsing plays, viewing their details, adding and removing favourites, and purchasing tickets |
+| **Manager** | Has the same opportunities as the basic User, but can also edit play's information |
+| **Admin** | Full access, including Play and User Management |
 
 ---
 
@@ -35,5 +55,3 @@ A web application project built with **ASP.NET Core**, **Entity Framework Core**
 | **ORM** | Entity Framework Core |
 | **Language** | C# |
 | **Architecture** | MVC-inspired structure |
-
-

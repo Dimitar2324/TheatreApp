@@ -25,7 +25,7 @@ A web application project built with **ASP.NET Core**, **Entity Framework Core**
 - **Buy tickets** for specific performances
 - **View purchased tickets**
 
-### 👥 User Management *(Admin Area)*
+### 👥 User Management
 - **View all registered users**
 - **Assign role to a user**
 - **Remove role from a user**
@@ -35,7 +35,7 @@ A web application project built with **ASP.NET Core**, **Entity Framework Core**
 
 ## 🔐 Roles
 
-The system uses **Role-Based Authorization** to restrict access to admin features.
+The system uses **Role-Based Authorization** to restrict access.
 
 | Role | Description |
 |------|-------------|

@@ -38,7 +38,7 @@ namespace TheatreApp.Services.Core.Admin
             ApplicationUser? targetUser = await this.userManager.FindByIdAsync(roleInputModel.UserId);
             if (targetUser == null)
             {
-                throw new ArgumentException("Invalid error");
+                throw new ArgumentException("Invalid user!");
             }
 
             bool roleExists = await this.roleManager.RoleExistsAsync(roleInputModel.Role);
@@ -51,6 +51,50 @@ namespace TheatreApp.Services.Core.Admin
             IdentityResult assignOperationResult = await this.userManager.AddToRoleAsync(targetUser, roleInputModel.Role);
 
             if (assignOperationResult == IdentityResult.Success)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        public async Task<bool> RemoveRoleAsync(RoleSelectionViewModel roleInputModel)
+        {
+            ApplicationUser? targetUser = await this.userManager.FindByIdAsync(roleInputModel.UserId);
+            if (targetUser == null)
+            {
+                throw new ArgumentException("Invalid user!");
+            }
+
+            bool roleExists = await this.roleManager.RoleExistsAsync(roleInputModel.Role);
+            if (!roleExists)
+            {
+                throw new ArgumentException($"Cannot remove role {roleInputModel.Role} from user!");
+            }
+
+            bool result = false;
+            IdentityResult assignOperationResult = await this.userManager.RemoveFromRoleAsync(targetUser, roleInputModel.Role);
+
+            if (assignOperationResult == IdentityResult.Success)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        public async Task<bool> DeleteUserAsync(string userId)
+        {
+            ApplicationUser? targetUser = await this.userManager.FindByIdAsync(userId);
+            if (targetUser == null)
+            {
+                throw new ArgumentException("Invalid user!");
+            }
+
+            bool result = false;
+            IdentityResult deleOperationResult = await this.userManager.DeleteAsync(targetUser);
+
+            if (deleOperationResult == IdentityResult.Success)
             {
                 result = true;
             }

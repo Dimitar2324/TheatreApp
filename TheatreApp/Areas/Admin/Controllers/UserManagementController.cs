@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+
 using TheatreApp.Services.Core.Admin.Interfaces;
 using TheatreApp.Web.ViewModels.Admin.UserManagement;
 
@@ -28,6 +29,36 @@ namespace TheatreApp.Web.Areas.Admin.Controllers
             try
             {
                 await this.userService.AssignToRoleAsync(roleSelectionInputModel);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveRole(RoleSelectionViewModel roleSelectionInputModel)
+        {
+            try
+            {
+                await this.userService.RemoveRoleAsync(roleSelectionInputModel);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            try
+            {
+                await this.userService.DeleteUserAsync(userId);
             }
             catch (Exception e)
             {

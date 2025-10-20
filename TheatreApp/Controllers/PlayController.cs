@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using TheatreApp.Services.Core.Interfaces;
+using TheatreApp.Utils.Constants;
 using TheatreApp.Web.ViewModels.Play;
 
 namespace TheatreApp.Web.Controllers
@@ -46,6 +48,7 @@ namespace TheatreApp.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{GlobalApplicationConstants.ManagerRoleName}, {GlobalApplicationConstants.AdminRoleName}")]
         public async Task<IActionResult> Edit(string? id)
         {
             try
@@ -68,6 +71,7 @@ namespace TheatreApp.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{GlobalApplicationConstants.ManagerRoleName}, {GlobalApplicationConstants.AdminRoleName}")]
         public async Task<IActionResult> Edit(PlayEditFormModel formModel)
         {
             if (!ModelState.IsValid)
